@@ -32,6 +32,7 @@ def index(request):
 
 def wipe(request):
     hddlist = []
+    wipestring = "dcfldd pattern=00 "
     for i in range(97, 113):
         hddletter = chr(i)
         hdd = subprocess.Popen(["ls /sys/block | grep sd%s" %hddletter], stdout=subprocess.PIPE, shell=True)
@@ -40,7 +41,9 @@ def wipe(request):
             hddserial = subprocess.Popen(["sudo smartctl -a /dev/%s | grep 'Serial Number'" %hdd], stdout=subprocess.PIPE, shell=True)
             hddserial = hddserial.stdout.read()[14:].strip()
 	    if hddserial != 'WD-WCAV90166138':
-		subprocess.call(["dd if=/dev/zero of=/dev/%s" %hdd], shell=True)
+		wipestring = wipestring + "of=/dev/%s " %hdd
+
+    subprocess.call([wipestring], shell=True)
 		
 
     return render(request, 'testwipe/wipe.html')
