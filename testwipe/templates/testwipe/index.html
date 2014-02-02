@@ -1,0 +1,14 @@
+
+<table align='center' border=1>
+<tr><th colspan=5>Hard Drive List</tn></tr>
+<tr>
+    <td>HDD</td><td>Device Model</td><td>Serial Number</td><td>hours on</td><td>self test</td>
+</tr>
+{% for i in hddlist %}
+{% cycle '<tr><td>' '<td>' '<td>' '<td>' '<td>' %}
+{{ i }}
+{% cycle '</td>' '</td>' '</td>' '</td>' '</td></tr>' %}
+{% endfor %}
+<tr><td colspan=5><a href="{% url 'wipe' %}">wipe all drives</a></td></tr>
+</table>
+
