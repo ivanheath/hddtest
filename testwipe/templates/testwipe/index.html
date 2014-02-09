@@ -4,12 +4,34 @@
 <tr>
     <td>HDD</td><td>Device Model</td><td>Serial Number</td><td>hours on</td><td>self test</td>
 </tr>
-{% for i in hddlist %}
-{% cycle '<tr><td>' '<td>' '<td>' '<td>' '<td>' %}
-{{ i }}
-{% cycle '</td>' '</td>' '</td>' '</td>' '</td></tr>' %}
+
+{% for i in harddrivelist %}
+<tr>
+    <td>{{ i.sd }}</td>
+    <td>{{ i.model }}</td>
+    <td>{{ i.serial }}</td>
+    <td>{{ i.hours }}</td>
+    <td>{{ i.smart }}</td>
+    <td>{{ i.location }}</td>
+</td>
 {% endfor %}
 <tr><td colspan=5><a href="{% url 'wipe' %}">wipe all drives</a></td></tr>
+</table>
+<table align = 'center' border=1>
+<tr>
+    <th colspan=4>Hard Drive List</th>
+</tr>
+{% for i in harddrivelist %}
+{% cycle '<tr>' '' '' '' %}
+<td>
+{{ i.sd }}<br />
+{{ i.model }}<br />
+{{ i.serial }}<br />
+{{ i.hours }}<br />
+{{ i.smart }}
+</td>
+{% cycle '' '' '' '</tr>' %}
+{% endfor %}
 </table>
 </br>
 instructions:
@@ -20,6 +42,7 @@ instructions:
 <li>any drives that don't show up are dead, replace with a different drive and refresh</li>
 <li>Any drives that fail the self test are bad, replace and refresh</li>
 <li>any drives over 30000 hours are too old, replace and refresh</li>
+<li>Any drives that are over 15000 hours are too old for wowrack builds</li>
 <li>hit wipe all drives</li>
 <li>come back tomorrow and check,  this page won't refresh or show progress, it will simply display a message when it's done</li>
 </ul>
