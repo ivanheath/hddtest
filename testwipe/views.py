@@ -3,7 +3,11 @@ from django.http import HttpResponse
 import os
 import subprocess
 
+
 def index(request):
+    return render(request, 'testwipe/index.html')
+
+def main(request):
     harddrivelist = []
     for i in range(97, 114):
 	hddletter = chr(i)
@@ -16,27 +20,25 @@ def index(request):
 	    hddserial = hddserial.stdout.read()[14:].strip()
 	    hddhours = subprocess.Popen(["sudo smartctl -a /dev/%s | grep Power_On_Hours" %hdd], stdout=subprocess.PIPE, shell=True)
 	    hddhours = hddhours.stdout.read()[-10:].strip()
+	    hddhours = hourstest(hddhours)
 	    hddsmart = subprocess.Popen(["sudo smartctl -H /dev/%s" %hdd], stdout=subprocess.PIPE, shell=True)
 	    hddsmart = hddsmart.stdout.read()[-8:].strip()
 	    hddlocation = subprocess.Popen(["file /sys/block/%s" %hdd], stdout=subprocess.PIPE, shell=True)
 	    hddlocation = hddlocation.stdout.read()[-20:-18].strip()
 	    hddlocation = locator(hddlocation)
 	    if hddsmart != 'PASSED':
-		hddsmart = 'FAILED'
+		hddsmart = 'FAILED SELF TEST'
        	    if hddserial != 'WD-WCAV90166138':
 		currenthdd = harddrive(hdd, hddmodel, hddserial, hddhours, hddsmart, hddlocation)
 		harddrivelist.append(currenthdd)
-   # harddrivelist.sort(key=lambda x: x.location)
-    #for y in harddrivelist:
-#	if y.location != y: 
- # 	    currenthdd = harddrive('empty', '', '', '', '', y)
-  #          harddrivelist.append(currenthdd)
-
     harddrivelist.sort(key=lambda x: x.location)
+    hddlist = layoutbuilder(harddrivelist)
 
-    return render(request, 'testwipe/index.html',
+    return render(request, 'testwipe/main.html',
 	{"harddrivelist": harddrivelist,
+	 "hddlist": hddlist,
 	})
+
 
 def wipe(request):
     hddlist = []
@@ -65,6 +67,13 @@ class harddrive:
 	self.hours = hours
 	self.smart = smart
 	self.location = location
+
+def hourstest(hddhours):
+    if int(hddhours) > 35040:
+	hddhours = hddhours + " TOO OLD"
+    elif int(hddhours) > 17520:
+	hddhours = hddhours + " SS ONLY"
+    return hddhours
 
 def locator(location):
 
@@ -101,3 +110,16 @@ def locator(location):
     elif location == '/3':
 	location = 16
     return location
+
+
+def layoutbuilder(harddrivelist):
+    hddlist = []
+    for x in range(1, 17):
+        for y in harddrivelist:
+            if y.location == x:
+                currenthdd = y
+        if currenthdd.location != x:
+            currenthdd = harddrive('', 'XXXXXXXXX', 'XXEMPTYXX', 'XXXXXXXXX', '', x)
+        hddlist.append(currenthdd)
+    
+    return hddlist

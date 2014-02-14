@@ -1,48 +1,17 @@
+<h1>DriveZilla DriveWiper!</h1>
 
-<table align='center' border=1>
-<tr><th colspan=5>Hard Drive List</tn></tr>
-<tr>
-    <td>HDD</td><td>Device Model</td><td>Serial Number</td><td>hours on</td><td>self test</td>
-</tr>
-
-{% for i in harddrivelist %}
-<tr>
-    <td>{{ i.sd }}</td>
-    <td>{{ i.model }}</td>
-    <td>{{ i.serial }}</td>
-    <td>{{ i.hours }}</td>
-    <td>{{ i.smart }}</td>
-    <td>{{ i.location }}</td>
-</td>
-{% endfor %}
-<tr><td colspan=5><a href="{% url 'wipe' %}">wipe all drives</a></td></tr>
-</table>
-<table align = 'center' border=1>
-<tr>
-    <th colspan=4>Hard Drive List</th>
-</tr>
-{% for i in harddrivelist %}
-{% cycle '<tr>' '' '' '' %}
-<td>
-{{ i.sd }}<br />
-{{ i.model }}<br />
-{{ i.serial }}<br />
-{{ i.hours }}<br />
-{{ i.smart }}
-</td>
-{% cycle '' '' '' '</tr>' %}
-{% endfor %}
-</table>
-</br>
 instructions:
 <ul>
-<li>plug all drives in.  be sure to physically attach them in order to help identify.</li>
-<li>refresh page</li>
-<li>check that all drives appear</li>
-<li>any drives that don't show up are dead, replace with a different drive and refresh</li>
+<li>read all instructions</li>
+<li>plug all drives in.</li>
+<li>click test drives</li>
+<li>check that all drives appear. the Bays can be tricky sometimes.</li>
+<li>any drives that don't show up need to be tested further but are probably dead.</li>
 <li>Any drives that fail the self test are bad, replace and refresh</li>
-<li>any drives over 30000 hours are too old, replace and refresh</li>
-<li>Any drives that are over 15000 hours are too old for wowrack builds</li>
+<li>any drives over 35040 hours are too old, replace and refresh</li>
+<li>Any drives that are over 17520 hours are too old for wowrack builds</li>
 <li>hit wipe all drives</li>
-<li>come back tomorrow and check,  this page won't refresh or show progress, it will simply display a message when it's done</li>
+<li>you will NOT see any progress indicator</li>
+<li>leave the page open and come back tomorrow to check.  It will tell you when it's done</li>
 </ul>
+<a href="{% url 'main' %}">test drives</a>

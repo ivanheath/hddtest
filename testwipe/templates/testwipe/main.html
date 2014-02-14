@@ -1,0 +1,19 @@
+
+<table align = 'center' border=1>
+<tr>
+    <th colspan=4>Hard Drive List</th>
+</tr>
+{% for i in hddlist %}
+{% cycle '<tr>' '' '' '' %}
+<td align='center'>
+{{ i.sd }}<br />
+{{ i.model }}<br />
+{{ i.serial }}<br />
+{{ i.hours }}<br />
+{{ i.smart }}<br />
+</td>
+{% cycle '' '' '' '</tr>' %}
+{% endfor %}
+<tr><td colspan=4 align='center'><a href="{% url 'wipe' %}">wipe all drives</a></td></tr>
+</table>
+
