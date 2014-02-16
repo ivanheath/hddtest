@@ -33,7 +33,7 @@ def main(request):
 		harddrivelist.append(currenthdd)
     harddrivelist.sort(key=lambda x: x.location)
     hddlist = layoutbuilder(harddrivelist)
-
+    
     return render(request, 'testwipe/main.html',
 	{"harddrivelist": harddrivelist,
 	 "hddlist": hddlist,
