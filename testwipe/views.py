@@ -119,7 +119,7 @@ def layoutbuilder(harddrivelist):
             if y.location == x:
                 currenthdd = y
         if currenthdd.location != x:
-            currenthdd = harddrive('', 'XXXXXXXXX', 'XXEMPTYXX', 'XXXXXXXXX', '', x)
+            currenthdd = harddrive('', '', 'EMPTY', '', '', x)
         hddlist.append(currenthdd)
     
     return hddlist

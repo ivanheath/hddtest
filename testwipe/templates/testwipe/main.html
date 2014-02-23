@@ -1,11 +1,14 @@
-
+{% load staticfiles %}
+<head>
+<link rel="stylesheet" type="test/css" href="{% static 'hddtest/main.css' %}">
+</head>
 <table align = 'center' border=1>
 <tr>
     <th colspan=4>Hard Drive List</th>
 </tr>
 {% for i in hddlist %}
 {% cycle '<tr>' '' '' '' %}
-<td align='center'>
+<td align='center'{% if i.serial == "EMPTY" %} class="empty"{% endif %}>
 {{ i.model }}<br />
 {{ i.serial }}<br />
 {{ i.hours }}<br />

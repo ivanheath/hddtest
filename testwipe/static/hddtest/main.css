@@ -1,0 +1,19 @@
+table
+{
+border-collapse:collapse;
+}
+table, td, th
+{
+border:3px solid grey;
+vertical-align:middle;
+padding:5px;
+}
+
+th
+{
+background-color:grey;
+}
+td.empty
+{
+background-color:red;
+}
