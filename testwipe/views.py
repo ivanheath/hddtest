@@ -9,7 +9,7 @@ def index(request):
 
 def main(request):
     harddrivelist = []
-    for i in range(97, 114):
+    for i in range(98, 122):
 	hddletter = chr(i)
         hdd = subprocess.Popen(["ls /sys/block | grep sd%s" %hddletter], stdout=subprocess.PIPE, shell=True)
         hdd = hdd.stdout.read().strip()
@@ -28,7 +28,7 @@ def main(request):
 	    hddlocation = locator(hddlocation)
 	    if hddsmart != 'PASSED':
 		hddsmart = 'FAILED SELF TEST'
-       	    if hddserial != 'WD-WCAV90166138':
+       	    if hddserial != 'WD-WCASYD980519':
 		currenthdd = harddrive(hdd, hddmodel, hddserial, hddhours, hddsmart, hddlocation)
 		harddrivelist.append(currenthdd)
     harddrivelist.sort(key=lambda x: x.location)
@@ -43,7 +43,7 @@ def main(request):
 def wipe(request):
     hddlist = []
     wipestring = "dcfldd pattern=00 "
-    for i in range(97, 113):
+    for i in range(98, 122):
         hddletter = chr(i)
         hdd = subprocess.Popen(["ls /sys/block | grep sd%s" %hddletter], stdout=subprocess.PIPE, shell=True)
         hdd = hdd.stdout.read().strip()
@@ -118,8 +118,12 @@ def layoutbuilder(harddrivelist):
         for y in harddrivelist:
             if y.location == x:
                 currenthdd = y
-        if currenthdd.location != x:
-            currenthdd = harddrive('', '', 'EMPTY', '', '', x)
+	    else:
+		currenthdd = harddrive('', '', 'EMPTY', '', '', x)
+        #if currenthdd.location != x:
+            #currenthdd = harddrive('', '', 'EMPTY', '', '', x)
+	if harddrivelist == []:
+	    currenthdd = harddrive('', '', 'EMPTY', '', '', x)
         hddlist.append(currenthdd)
     
     return hddlist
