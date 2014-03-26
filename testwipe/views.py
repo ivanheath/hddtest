@@ -50,7 +50,7 @@ def wipe(request):
         if hdd != '':
             hddserial = subprocess.Popen(["sudo smartctl -a /dev/%s | grep 'Serial Number'" %hdd], stdout=subprocess.PIPE, shell=True)
             hddserial = hddserial.stdout.read()[14:].strip()
-	    if hddserial != 'WD-WCAV90166138':
+	    if hddserial != 'WD-WCASYD980519':
 		wipestring = wipestring + "of=/dev/%s " %hdd
 
     subprocess.call([wipestring], shell=True)
@@ -114,16 +114,16 @@ def locator(location):
 
 def layoutbuilder(harddrivelist):
     hddlist = []
+    currenthdd = harddrive('', '', 'EMPTY', '', '', 1)
     for x in range(1, 17):
         for y in harddrivelist:
             if y.location == x:
                 currenthdd = y
-	    else:
-		currenthdd = harddrive('', '', 'EMPTY', '', '', x)
-        #if currenthdd.location != x:
-            #currenthdd = harddrive('', '', 'EMPTY', '', '', x)
-	if harddrivelist == []:
-	    currenthdd = harddrive('', '', 'EMPTY', '', '', x)
+		locationtest = 1
+	#if locationtest == 1:
+	    #locationtest = 2
+        if currenthdd.location != x:
+            currenthdd = harddrive('', '', 'EMPTY', '', '', x)
         hddlist.append(currenthdd)
     
     return hddlist
