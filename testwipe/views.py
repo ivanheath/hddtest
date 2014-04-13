@@ -58,6 +58,34 @@ def wipe(request):
 
     return render(request, 'testwipe/wipe.html')
 
+def clone(request):
+    hddlist = []
+    goodmark = 0
+    clonestring = "dcfldd if=/dev/"
+    tobecloned = ""
+    for i in range(98, 122):
+	hddletter = chr(i)
+	hdd = subprocess.Popen(["ls /sys/block | grep sd%s" %hddletter], stdout=subprocess.PIPE, shell=True)
+	hdd = hdd.stdout.read().strip()
+	if hdd != '':
+	    hddlocation = subprocess.Popen(["file /sys/block/%s" %hdd], stdout=subprocess.PIPE, shell=True)
+	    hddlocation = hddlocation.stdout.read()[-20:-18].strip()
+	    hddlocation = locator(hddlocation)
+	    if hddlocation == 1:
+		clonestring = clonestring + hdd
+		goodmark = 1
+	    else:
+		tobecloned = tobecloned + " of=/dev/" + hdd
+    if goodmark == 0:
+	return HttpResponse('no drive is loaded in slot one.  please load a drive in slot one to be cloned')
+    elif tobecloned == "/":
+	return HttpResponse("there are no drives to be cloned. this ain't gonna work")
+    else:
+	clonestring = clonestring + tobecloned + " &"
+	subprocess.call([clonestring], shell=True)
+	return HttpResponse("heres the command you're running:  " + clonestring)
+
+
 class harddrive:
 
     def __init__(self, sd, model, serial, hours, smart, location):
@@ -69,10 +97,16 @@ class harddrive:
 	self.location = location
 
 def hourstest(hddhours):
-    if int(hddhours) > 35040:
-	hddhours = hddhours + " TOO OLD"
+    try:
+	a = int(hddhours)
+    except:
+	hddhours = 9999999999
+    if int(hddhours) == 9999999999:
+	hddhours = "EPIC FAIL"
+    elif int(hddhours) > 35040:
+	hddhours = str(hddhours) + " TOO OLD"
     elif int(hddhours) > 17520:
-	hddhours = hddhours + " SS ONLY"
+	hddhours = (hddhours) + " SS ONLY"
     return hddhours
 
 def locator(location):
@@ -120,8 +154,6 @@ def layoutbuilder(harddrivelist):
             if y.location == x:
                 currenthdd = y
 		locationtest = 1
-	#if locationtest == 1:
-	    #locationtest = 2
         if currenthdd.location != x:
             currenthdd = harddrive('', '', 'EMPTY', '', '', x)
         hddlist.append(currenthdd)

@@ -16,6 +16,12 @@
 </td>
 {% cycle '' '' '' '</tr>' %}
 {% endfor %}
-<tr><td colspan=4 align='center'><a href="{% url wipe %}">wipe all drives</a><a href={% url clean %}>clean drives</a></td></tr>
+<tr>
+<td colspan=2 align='center'><a href="{% url wipe %}">wipe all drives</a></td>
+<td colspan=2 align='center'><a href={% url clean %}>clean all drives</a></td>
+</tr>
+<tr>
+<td colspan=4 align='center'><a href="{% url clone %}">clone drive one to all other drives</a></td>
+</tr>
 </table>
 
